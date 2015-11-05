@@ -1,0 +1,7 @@
+<resources>
+
+    <string name="app_name">Distance Calculator</string>
+    <string name="url">https://maps.googleapis.com/maps/api/geocode/json</string>
+    <string name="api_key">AIzaSyAqOwC2G_RtyQrJz6UaLv16BQzyonXazxY</string>
+
+</resources>
