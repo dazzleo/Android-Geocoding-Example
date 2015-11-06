@@ -2,6 +2,7 @@ package bsadd.rafi.distancecalculator;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
@@ -14,7 +15,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	
@@ -48,14 +48,15 @@ public class MainActivity extends Activity {
 	
 	private String readJSONString(String address) {
 		try {
-			URL url = new URL(getString(R.string.url) + 
-					"?address=" + address + "&key=" + getString(R.string.api_key));
+			String urlString = getString(R.string.url) + 
+					"?address=" + URLEncoder.encode(address, "utf-8") + "&key=" + getString(R.string.api_key);
+			URL url = new URL(urlString);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			InputStream in = connection.getInputStream();
 			String response = IOUtils.toString(in);
 			return response;
 		} catch (Exception e) {
-			Toast.makeText(this, "Error fetching data", Toast.LENGTH_LONG).show();
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -78,21 +79,27 @@ public class MainActivity extends Activity {
 		@Override
 		protected void onPostExecute(String jsonString) {
 			super.onPostExecute(jsonString);
-			try {
-				JSONObject json = new JSONObject(jsonString);
-				JSONObject locationObject = json.getJSONArray("results")
-					.getJSONObject(0)
-					.getJSONObject("geometry")
-					.getJSONObject("location");
-				
-				String latitude = locationObject.getString("lat");
-				String longitude = locationObject.getString("lng");
-				
-				
-				resultView.setText("Latitude: " + latitude + ", Longitude: " + longitude);
+			
+			if (jsonString == null) {
+				resultView.setText("Error loading data");
 			}
-			catch (JSONException exception) {
-				exception.printStackTrace();
+			else {
+				try {
+					JSONObject json = new JSONObject(jsonString);
+					JSONObject locationObject = json.getJSONArray("results")
+						.getJSONObject(0)
+						.getJSONObject("geometry")
+						.getJSONObject("location");
+					
+					String latitude = locationObject.getString("lat");
+					String longitude = locationObject.getString("lng");
+					
+					
+					resultView.setText("Latitude: " + latitude + ", Longitude: " + longitude);
+				}
+				catch (JSONException exception) {
+					exception.printStackTrace();
+				}
 			}
 		}
 	};
