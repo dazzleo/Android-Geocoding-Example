@@ -16,6 +16,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+/**
+ * This activity corresponds to the only screen of our application.
+ * The design of this activity is in layout/activity_main file. 
+ * 
+ * You should try to understand line by line what is going on here.
+ * A couple of other things to check: As the application accesses Internet, 
+ * I have added the permission "android.permission.INTERNET" in
+ * AndroidManifest.xml. I've also used a class IOUtils which is part of
+ * Apache Commons IO library, so I've put the corresponding jar file in
+ * the libs folder.
+ */
 public class MainActivity extends Activity {
 	
 	private EditText addressField;
@@ -28,7 +39,7 @@ public class MainActivity extends Activity {
 		
 		setContentView(R.layout.activity_main);
 		
-		// Get references of the view eleemnts from the xml layout 
+		// Get references of the view elemnts from the xml layout 
 		addressField = (EditText) findViewById(R.id.et_address);
 		calculateButton = (Button) findViewById(R.id.bt_calculate);
 		resultView = (TextView) findViewById(R.id.tv_result);
@@ -154,9 +165,7 @@ public class MainActivity extends Activity {
 			InputStream in = connection.getInputStream();
 			
 			// The IOUtils.toString method fetches all data from an input stream
-			// and converts it into a string. The IOUtils class is a part of the
-			// the Apache Commons IO library (you will find the corresponding jar file
-			// of the library in libs folder).
+			// and converts it into a string.
 			String response = IOUtils.toString(in);
 			return response;
 		} catch (Exception e) {
